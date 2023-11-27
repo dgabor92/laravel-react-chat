@@ -78,8 +78,3 @@ export const changeSettings = async (
   });
   return response.data;
 };
-export const useSettingsMutation = () => {
-  return useMutation((credential: { name: string; email: string }) =>
-    changeSettings(credential.name, credential.email)
-  );
-};

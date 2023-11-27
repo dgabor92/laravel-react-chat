@@ -5,6 +5,7 @@ import Welcome from "../pages/Welcome";
 import Signup from "../pages/Signup";
 import PrivateRoute from "./PrivateRoute";
 import Settings from "../pages/Settings";
+import ChatPage from "../pages/ChatPage";
 
 const NotFound = lazy(() => import("../pages/404"));
 
@@ -23,7 +24,7 @@ const routeList: RouteObject[] = [
   },
   {
     path: "/dashboard",
-    element: <PrivateRoute />,
+    element: <ChatPage />,
   },
   {
     path: "/settings",
