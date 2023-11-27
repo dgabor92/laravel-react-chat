@@ -1,7 +1,6 @@
 import Navbar from "./Navbar";
 import { useGetUserQuery } from "../lib/api";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
 
 interface DashboardProps {
   children: React.ReactNode;
