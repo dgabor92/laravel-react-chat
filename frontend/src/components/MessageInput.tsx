@@ -1,10 +1,5 @@
 import React from "react";
-
-interface MessageInputProps {
-  newMessage: string;
-  setNewMessage: React.Dispatch<React.SetStateAction<string>>;
-  handleCreateMessage: () => void;
-}
+import { MessageInputProps } from "../lib/interfaces";
 
 const MessageInput: React.FC<MessageInputProps> = ({
   newMessage,

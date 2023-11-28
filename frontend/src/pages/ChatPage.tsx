@@ -6,10 +6,9 @@ import {
   getAllUsers,
   getChatRoomUsers,
   getChatRooms,
-  getMessages,
   getUser,
 } from "../lib/api";
-import { ChatRoom, ChatRoomUsers, Message, User } from "../lib/interfaces";
+import { ChatRoom, ChatRoomUsers, User } from "../lib/interfaces";
 import { useState } from "react";
 
 const ChatPage = () => {
@@ -32,10 +31,6 @@ const ChatPage = () => {
     queryKey: ["users"],
     queryFn: getAllUsers,
   });
-  const { data: messages } = useQuery<Message[]>({
-    queryKey: ["messages"],
-    queryFn: getMessages,
-  });
 
   return (
     <Dashboard>
@@ -52,9 +47,8 @@ const ChatPage = () => {
           )}
         </div>
         <div className="w-2/3 overflow-y-auto p-2">
-          {messages && selectedChatRoomId !== null && user && (
+          {selectedChatRoomId !== null && user && (
             <ChatWindow
-              messages={messages}
               selectedChatRoomId={selectedChatRoomId}
               user={user}
               users={users}

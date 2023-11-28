@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Message;
 use Illuminate\Support\Facades\Broadcast;
 
 /*
@@ -15,4 +16,9 @@ use Illuminate\Support\Facades\Broadcast;
 
 Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
     return (int) $user->id === (int) $id;
+});
+
+Broadcast::channel('chat-room.{chatRoomId}', function ($user, $chatRoomId) {
+    // return Message::where('chat_room_id', $chatRoomId)->get();
+    return true;
 });

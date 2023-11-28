@@ -1,3 +1,11 @@
+export interface DashboardProps {
+  children: React.ReactNode;
+}
+
+export interface NavbarProps {
+  user: User;
+}
+
 export interface User {
   id: number;
   name: string;
@@ -82,4 +90,31 @@ export interface Message {
   message: string;
   created_at: string;
   updated_at: string;
+}
+
+export interface MessageInputProps {
+  newMessage: string;
+  setNewMessage: React.Dispatch<React.SetStateAction<string>>;
+  handleCreateMessage: () => void;
+}
+
+export interface ChatroomProps {
+  chatrooms: ChatRoom[];
+  user: User;
+  users: User[];
+  chatUsers: ChatRoomUsers[];
+  setSelectedChatRoomId?: React.Dispatch<React.SetStateAction<number | null>>;
+}
+
+export interface ChatWindowProps {
+  selectedChatRoomId: number;
+  user: User;
+  users?: User[];
+}
+
+export interface MessagesProps {
+  chatContainerRef: React.RefObject<HTMLDivElement>;
+  messages: Message[];
+  user: User;
+  users?: User[];
 }

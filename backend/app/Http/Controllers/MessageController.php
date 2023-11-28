@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Message;
+use App\Events\MessageCreated;
 use Illuminate\Http\Request;
 
 class MessageController extends Controller
@@ -33,6 +34,7 @@ class MessageController extends Controller
             'user_id' => $request->user_id,
             'message' => $request->message,
         ]);
+        event(new MessageCreated($message));
 
         return response()->json([
             'message' => 'Message created successfully',

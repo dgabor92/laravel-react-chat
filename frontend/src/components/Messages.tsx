@@ -1,12 +1,5 @@
 import React from "react";
-import { Message, User } from "../lib/interfaces";
-
-interface MessagesProps {
-  chatContainerRef: React.RefObject<HTMLDivElement>;
-  messages: Message[];
-  user: User;
-  users?: User[];
-}
+import { MessagesProps } from "../lib/interfaces";
 
 const Messages: React.FC<MessagesProps> = ({
   chatContainerRef,

@@ -1,10 +1,8 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
-  ChatRoom,
   ChatRoomInput,
-  User,
-  ChatRoomUsers,
   chatUsersInput,
+  ChatroomProps,
 } from "../lib/interfaces";
 import { useState } from "react";
 import {
@@ -15,14 +13,6 @@ import {
 import { notification } from "antd";
 import ChatCard from "./ChatCard";
 import ChatRoomDialog from "./ChatRoomDialog";
-
-interface ChatroomProps {
-  chatrooms: ChatRoom[];
-  user: User;
-  users: User[];
-  chatUsers: ChatRoomUsers[];
-  setSelectedChatRoomId?: React.Dispatch<React.SetStateAction<number | null>>;
-}
 
 const ChatRooms: React.FC<ChatroomProps> = ({
   chatrooms,

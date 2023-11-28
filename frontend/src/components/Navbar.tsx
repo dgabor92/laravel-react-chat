@@ -2,7 +2,7 @@ import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { logOut } from "../lib/api";
-import { User } from "../lib/interfaces";
+import { NavbarProps } from "../lib/interfaces";
 import { useNavigate } from "react-router-dom";
 import { useMutation, QueryClient } from "@tanstack/react-query";
 import { AxiosResponse } from "axios";
@@ -11,9 +11,6 @@ const queryClient = new QueryClient();
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
-}
-interface NavbarProps {
-  user: User;
 }
 
 export default function Navbar({ user }: NavbarProps) {
