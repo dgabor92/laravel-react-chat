@@ -146,11 +146,19 @@ const ChatRooms: React.FC<ChatroomProps> = ({
         </button>
       </div>
       <div>
-        <ChatCard
-          userChatRooms={userChatRooms}
-          handleDelete={handleDelete}
-          handleChatRoomSelection={handleChatRoomSelection}
-        />
+        {userChatRooms.length > 0 ? (
+          <ChatCard
+            userChatRooms={userChatRooms}
+            handleDelete={handleDelete}
+            handleChatRoomSelection={handleChatRoomSelection}
+          />
+        ) : (
+          <div className="flex justify-center items-center h-full">
+            <p className="text-md text-white">
+              No chat rooms available. Please create a new one.
+            </p>
+          </div>
+        )}
       </div>
       <ChatRoomDialog
         showDialog={showDialog}
