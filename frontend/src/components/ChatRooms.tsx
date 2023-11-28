@@ -1,32 +1,179 @@
-import React, { useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  ChatRoom,
+  ChatRoomInput,
+  User,
+  ChatRoomUsers,
+  chatUsersInput,
+} from "../lib/interfaces";
+import { useState } from "react";
+import {
+  createChatRoom,
+  createChatRoomUsers,
+  deleteChatRoom,
+} from "../lib/api";
+import { notification } from "antd";
+import ChatCard from "./ChatCard";
+import ChatRoomDialog from "./ChatRoomDialog";
 
-const ChatRooms = () => {
-  const [chats, setChats] = useState([]); // Példa: chat-ek tárolására
+interface ChatroomProps {
+  chatrooms: ChatRoom[];
+  user: User;
+  users: User[];
+  chatUsers: ChatRoomUsers[];
+  setSelectedChatRoomId?: React.Dispatch<React.SetStateAction<number | null>>;
+}
 
-  const handleCreateChat = () => {
-    // Logika a chat létrehozására - példa:
-    const newChat = { id: chats.length + 1, name: `Chat ${chats.length + 1}` };
-    setChats([...chats, newChat]);
+const ChatRooms: React.FC<ChatroomProps> = ({
+  chatrooms,
+  user,
+  users,
+  chatUsers,
+  setSelectedChatRoomId,
+}) => {
+  const queryClient = useQueryClient();
+  const [newChatName, setNewChatName] = useState("");
+  const [selectedUsers, setSelectedUsers] = useState<Number[]>([]);
+  const [showDialog, setShowDialog] = useState(false);
+  const [showUserSelection, setShowUserSelection] = useState(false);
+
+  const deleteChatRoomMutate = useMutation(
+    (args: number) => {
+      return deleteChatRoom(args);
+    },
+    {
+      onSettled: () => {
+        queryClient.invalidateQueries(["chatrooms"]);
+      },
+    }
+  );
+
+  const handleDelete = async (id: number) => {
+    if (window.confirm("Are you sure?")) {
+      await deleteChatRoomMutate.mutateAsync(id);
+      notification.success({
+        message: "Chat room deleted",
+        description: "Chat room has been deleted successfully",
+      });
+      queryClient.invalidateQueries(["chatroomusers"]);
+    }
+  };
+
+  const chatRoomMutation = useMutation(
+    (args: ChatRoomInput) => {
+      return createChatRoom(args);
+    },
+    {
+      onSettled: () => {
+        queryClient.invalidateQueries(["chatrooms"]);
+      },
+    }
+  );
+
+  const chatUsersMutation = useMutation(
+    (args: chatUsersInput) => {
+      return createChatRoomUsers(args);
+    },
+    {
+      onSettled: () => {
+        queryClient.invalidateQueries(["chatroomusers"]);
+      },
+    }
+  );
+
+  const handleClick = () => {
+    setShowDialog(true);
+  };
+
+  const handleCreateChatRoom = async () => {
+    if (!showUserSelection) {
+      await chatRoomMutation.mutateAsync({
+        name: newChatName,
+        created_by: user.name,
+      });
+      setNewChatName("");
+
+      setShowUserSelection(true);
+    } else {
+      const selectedUserIds = selectedUsers.map(Number);
+      selectedUserIds.push(user.id);
+      await chatUsersMutation.mutateAsync({
+        chat_room_id: chatrooms[chatrooms.length - 1].id,
+        user_id: selectedUserIds,
+      });
+
+      handleCloseDialog();
+      setShowUserSelection(false);
+      queryClient.invalidateQueries(["chatrooms"]);
+      queryClient.invalidateQueries(["chatroomusers"]);
+
+      notification.success({
+        message: "Chat room created",
+        description: "Chat room has been created and users added successfully",
+      });
+    }
+  };
+
+  const handleCloseDialog = () => {
+    setShowDialog(false);
+    setShowUserSelection(false);
+  };
+
+  const userChatRoomIds = chatUsers
+    .filter((chatUser) => chatUser.user_id === user.id)
+    .map((chatUser) => chatUser.chat_room_id);
+  const userChatRooms = chatrooms.filter((chatroom) =>
+    userChatRoomIds.includes(chatroom.id)
+  );
+
+  const handleChatRoomSelection = (chatRoomId: number) => {
+    setSelectedChatRoomId && setSelectedChatRoomId(chatRoomId);
   };
 
   return (
-    <div className="w-full h-fullp-4">
+    <div className="w-full  overflow-y-auto h-96 scroll-auto border p-2 rounded-xl border-blue-500">
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-lg font-bold">ChatRooms</h2>
+        <h2 className="text-lg text-white font-bold">My Chats</h2>
         <button
-          onClick={handleCreateChat}
-          className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
+          className="px-2 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-700 focus:outline-none focus:bg-blue-600"
+          onClick={handleClick}
         >
-          Create new Chat
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M12 4v16m8-8H4"
+            />
+          </svg>
         </button>
       </div>
-      <div className="h-full overflow-y-auto">
-        {chats.map((chat) => (
-          <div key={chat.id} className="border-b py-2">
-            {chat.name}
-          </div>
-        ))}
+      <div>
+        <ChatCard
+          userChatRooms={userChatRooms}
+          handleDelete={handleDelete}
+          handleChatRoomSelection={handleChatRoomSelection}
+        />
       </div>
+      <ChatRoomDialog
+        showDialog={showDialog}
+        showUserSelection={showUserSelection}
+        users={users}
+        selectedUsers={selectedUsers}
+        newChatName={newChatName}
+        setNewChatName={setNewChatName}
+        handleCloseDialog={handleCloseDialog}
+        handleCreateChatRoom={handleCreateChatRoom}
+        user={user}
+        setSelectedUsers={setSelectedUsers}
+        setShowUserSelection={setShowUserSelection}
+      />
     </div>
   );
 };

@@ -1,19 +1,16 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import customAxios from "../config/http";
 import axios from "axios";
-
+import {
+  User,
+  ChatRoom,
+  ChatRoomInput,
+  chatUsersInput,
+  ChatRoomUsers,
+  Message,
+  MessageInputs,
+} from "./interfaces";
 const baseURL = import.meta.env.VITE_BASE_URL;
-
-export interface User {
-  id: number;
-  name: string;
-  email: string;
-  // role: number;
-  email_verified_at: string | null;
-  createdAt: string;
-  updatedAt: string;
-  // photo_url: string;
-}
 
 export interface LoginResponse {
   token: string;
@@ -58,6 +55,14 @@ export const getUser = async (): Promise<User> => {
   return response.data;
 };
 
+export const getAllUsers = async (): Promise<User[]> => {
+  const response = await customAxios.get("/users");
+  if (response.status !== 200) {
+    throw new Error("Invalid credentials");
+  }
+  return response.data;
+};
+
 export const useGetUserQuery = () => {
   return useQuery<User>(["user"], getUser);
 };
@@ -76,5 +81,46 @@ export const changeSettings = async (
     name,
     email,
   });
+  return response.data;
+};
+
+export const getChatRooms = async (): Promise<ChatRoom[]> => {
+  const response = await customAxios.get("/chatrooms");
+  return response.data;
+};
+
+export const getChatRoomUsers = async (): Promise<ChatRoomUsers> => {
+  const response = await customAxios.get("/chatroom_users");
+  return response.data;
+};
+
+export const deleteChatRoom = async (id: number): Promise<string> => {
+  const response = await customAxios.delete(`/chatrooms/${id}`);
+  return response.data;
+};
+
+export const createChatRoom = async (
+  chatInput: ChatRoomInput
+): Promise<ChatRoom> => {
+  const response = await customAxios.post("/chatrooms", chatInput);
+  return response.data;
+};
+
+export const createChatRoomUsers = async (
+  chatUsersInput: chatUsersInput
+): Promise<ChatRoomUsers> => {
+  const response = await customAxios.post("/chatroom_users", chatUsersInput);
+  return response.data;
+};
+
+export const getMessages = async (): Promise<Message[]> => {
+  const response = await customAxios.get("/messages");
+  return response.data;
+};
+
+export const createMessage = async (
+  message: MessageInputs
+): Promise<Message> => {
+  const response = await customAxios.post("/messages", message);
   return response.data;
 };

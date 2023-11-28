@@ -24,10 +24,8 @@ function Dashboard({ children }: DashboardProps) {
   return (
     <div className="min-h-screen bg-gradient-to-r from-blue-400 to-purple-400">
       <Navbar user={user} />
-      <main>
-        <div className="mx-auto  max-w-7xl py-6 sm:px-6 lg:px-8">
-          {children}
-        </div>
+      <main className="">
+        <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">{children}</div>
       </main>
     </div>
   );

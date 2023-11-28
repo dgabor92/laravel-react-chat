@@ -1,17 +1,11 @@
 import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
-import { User, logOut } from "../lib/api";
+import { logOut } from "../lib/api";
+import { User } from "../lib/interfaces";
 import { useNavigate } from "react-router-dom";
 import { useMutation, QueryClient } from "@tanstack/react-query";
 import { AxiosResponse } from "axios";
-
-const navigation = [
-  { name: "Dashboard", href: "/dashboard", current: true },
-  // { name: "Team", href: "#", current: false },
-  // { name: "Projects", href: "#", current: false },
-  // { name: "Calendar", href: "#", current: false },
-];
 
 const queryClient = new QueryClient();
 
@@ -67,11 +61,9 @@ export default function Navbar({ user }: NavbarProps) {
                     <Menu.Button className="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                       <span className="absolute -inset-1.5" />
                       <span className="sr-only">Open user menu</span>
-                      <img
-                        className="h-8 w-8 rounded-full"
-                        src={user?.photo_url}
-                        alt=""
-                      />
+                      <div className="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center text-lg">
+                        {user?.name?.substring(0, 2).toUpperCase()}
+                      </div>
                     </Menu.Button>
                   </div>
                   <Transition
@@ -116,26 +108,6 @@ export default function Navbar({ user }: NavbarProps) {
               </div>
             </div>
           </div>
-          <Disclosure.Panel className="sm:hidden">
-            <div className="space-y-1 px-2 pb-3 pt-2">
-              {navigation.map((item) => (
-                <Disclosure.Button
-                  key={item.name}
-                  as="a"
-                  href={item.href}
-                  className={classNames(
-                    item.current
-                      ? "bg-gray-900 text-white"
-                      : "text-gray-300 hover:bg-gray-700 hover:text-white",
-                    "block rounded-md px-3 py-2 text-base font-medium"
-                  )}
-                  aria-current={item.current ? "page" : undefined}
-                >
-                  {item.name}
-                </Disclosure.Button>
-              ))}
-            </div>
-          </Disclosure.Panel>
         </>
       )}
     </Disclosure>

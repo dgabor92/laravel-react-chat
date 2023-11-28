@@ -29,5 +29,13 @@ class UserSeeder extends Seeder
             'email' => 'super@admin.com',
             'password' => $password,
         ]);
+        // create 10 users
+        for ($i = 0; $i < 10; $i++) {
+            User::create([
+                'name' => $faker->name,
+                'email' => $faker->email,
+                'password' => $password,
+            ]);
+        }
     }
 }
