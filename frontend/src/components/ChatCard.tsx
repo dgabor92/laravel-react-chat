@@ -23,7 +23,7 @@ const ChatCard: React.FC<ChatCardProps> = ({
           </div>
           <div className="">
             <button
-              className="p-2 focus:outline-none"
+              className="p-2 focus:outline-none hover:bg-red-600 rounded-xl"
               onClick={() => handleDelete(chat.id)}
             >
               <TrashIcon className="h-5 w-5" aria-hidden="true" color="red" />

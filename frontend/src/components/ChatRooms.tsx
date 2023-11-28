@@ -46,6 +46,7 @@ const ChatRooms: React.FC<ChatroomProps> = ({
         description: "Chat room has been deleted successfully",
       });
       queryClient.invalidateQueries(["chatroomusers"]);
+      setSelectedChatRoomId && setSelectedChatRoomId(null);
     }
   };
 
