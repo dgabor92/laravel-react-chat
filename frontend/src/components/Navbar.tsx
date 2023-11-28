@@ -46,7 +46,7 @@ export default function Navbar({ user }: NavbarProps) {
               <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                 <div
                   onClick={() => navigate("/dashboard")}
-                  className="flex flex-shrink-0 text-white uppercase items-center hover:cursor-pointer hover:text-gray-300 text-xl font-semibold"
+                  className="flex flex-shrink-0 text-white uppercase items-center hover:cursor-pointer p-2 hover:text-white hover:bg-blue-700  hover:rounded-xl text-xl font-semibold"
                 >
                   Laravel-React-Chat
                 </div>
