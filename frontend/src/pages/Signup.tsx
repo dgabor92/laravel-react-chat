@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { signUp } from "../lib/api";
 import { useNavigate } from "react-router-dom";
+import { notification } from "antd";
 
 type SignupFormProps = {
   name: string;
@@ -21,9 +22,30 @@ const Signup = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(form);
-    signUp(form.name, form.email, form.password, form.password_confirmation);
-    navigate("/login");
+    if (Object.values(form).some((value) => !value)) {
+      notification.error({
+        message: "Error",
+        description: "Please fill in all the fields",
+      });
+      return;
+    }
+    if (form.password !== form.password_confirmation) {
+      notification.error({
+        message: "Error",
+        description: "Passwords do not match",
+      });
+      return;
+    }
+    try {
+      signUp(form.name, form.email, form.password, form.password_confirmation);
+      navigate("/login");
+    } catch (error) {
+      console.log(error);
+      notification.error({
+        message: "Error",
+        description: "Invalid credentials",
+      });
+    }
   };
 
   return (

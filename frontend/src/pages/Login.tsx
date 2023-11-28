@@ -2,6 +2,7 @@ import * as React from "react";
 import { useState } from "react";
 import { logIn } from "../lib/api";
 import { useNavigate } from "react-router-dom";
+import { notification } from "antd";
 
 type LoginFormProps = {
   email: string;
@@ -17,9 +18,24 @@ export default function Login() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const response = await logIn(form.email, form.password);
-    localStorage.setItem("token", response.token);
-    navigate("/dashboard");
+    if (!form.email || !form.password) {
+      notification.error({
+        message: "Error",
+        description: "Please fill in all the fields",
+      });
+      return;
+    }
+    try {
+      const response = await logIn(form.email, form.password);
+      localStorage.setItem("token", response.token);
+      navigate("/dashboard");
+    } catch (error) {
+      console.log(error);
+      notification.error({
+        message: "Error",
+        description: "Invalid credentials",
+      });
+    }
   };
 
   return (
