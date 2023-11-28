@@ -40,6 +40,12 @@ const Messages: React.FC<MessagesProps> = ({
             <div className="flex justify-center text-center items-center ml-4">
               <span className="break-all">{msg.message}</span>
             </div>
+            <div className="flex text-center justify-center items-center text-sm text-gray-500 ml-4">
+              {new Date(msg.created_at).toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+              })}
+            </div>
           </div>
         </div>
       ))}
