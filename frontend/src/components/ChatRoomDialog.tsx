@@ -59,6 +59,12 @@ const ChatRoomDialog: React.FC<ChatRoomDialogProps> = ({
                   );
                   setSelectedUsers(selectedUserIds);
                 }}
+                style={{
+                  height: "auto",
+                  width: "350px",
+                  overflowY: "auto",
+                  maxHeight: "350px",
+                }}
               >
                 {users
                   .filter((u) => u.id !== user.id)
@@ -69,6 +75,7 @@ const ChatRoomDialog: React.FC<ChatRoomDialogProps> = ({
                   ))}
               </select>
             </div>
+
             <div className="flex justify-end">
               <button
                 onClick={handleCreateChatRoom}

@@ -78,6 +78,11 @@ const ChatRooms: React.FC<ChatroomProps> = ({
 
   const handleCreateChatRoom = async () => {
     if (!showUserSelection) {
+      if (!newChatName)
+        return notification.error({
+          message: "Chat room name required",
+          description: "Please enter a chat room name",
+        });
       await chatRoomMutation.mutateAsync({
         name: newChatName,
         created_by: user.name,
