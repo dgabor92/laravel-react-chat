@@ -18,7 +18,6 @@ const ChatRooms: React.FC<ChatroomProps> = ({
   chatrooms,
   user,
   users,
-  chatUsers,
   setSelectedChatRoomId,
 }) => {
   const queryClient = useQueryClient();
@@ -39,6 +38,15 @@ const ChatRooms: React.FC<ChatroomProps> = ({
   );
 
   const handleDelete = async (id: number) => {
+    if (
+      user.name !== chatrooms.find((chatroom) => chatroom.id === id)?.created_by
+    ) {
+      return notification.error({
+        message: "Chat room not created by you",
+        description: "You can only delete chat rooms created by you",
+      });
+    }
+
     if (window.confirm("Are you sure?")) {
       await deleteChatRoomMutate.mutateAsync(id);
       notification.success({
@@ -115,13 +123,6 @@ const ChatRooms: React.FC<ChatroomProps> = ({
     setShowUserSelection(false);
   };
 
-  const userChatRoomIds = chatUsers
-    .filter((chatUser) => chatUser.user_id === user.id)
-    .map((chatUser) => chatUser.chat_room_id);
-  const userChatRooms = chatrooms.filter((chatroom) =>
-    userChatRoomIds.includes(chatroom.id)
-  );
-
   const handleChatRoomSelection = (chatRoomId: number) => {
     setSelectedChatRoomId && setSelectedChatRoomId(chatRoomId);
   };
@@ -151,9 +152,9 @@ const ChatRooms: React.FC<ChatroomProps> = ({
         </button>
       </div>
       <div>
-        {userChatRooms.length > 0 ? (
+        {chatrooms.length > 0 ? (
           <ChatCard
-            userChatRooms={userChatRooms}
+            userChatRooms={chatrooms}
             handleDelete={handleDelete}
             handleChatRoomSelection={handleChatRoomSelection}
           />

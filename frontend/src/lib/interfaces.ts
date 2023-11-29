@@ -102,7 +102,6 @@ export interface ChatroomProps {
   chatrooms: ChatRoom[];
   user: User;
   users: User[];
-  chatUsers: ChatRoomUsers[];
   setSelectedChatRoomId?: React.Dispatch<React.SetStateAction<number | null>>;
 }
 

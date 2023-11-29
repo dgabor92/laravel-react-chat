@@ -18,6 +18,7 @@ const ChatPage = () => {
   const { data: chatrooms } = useQuery<ChatRoom[]>({
     queryKey: ["chatrooms"],
     queryFn: getChatRooms,
+    refetchInterval: 6000,
   });
   const { data: chatUsers } = useQuery<ChatRoomUsers[]>({
     queryKey: ["chatroomusers"],
@@ -41,7 +42,6 @@ const ChatPage = () => {
               chatrooms={chatrooms}
               user={user}
               users={users}
-              chatUsers={chatUsers}
               setSelectedChatRoomId={setSelectedChatRoomId}
             />
           )}

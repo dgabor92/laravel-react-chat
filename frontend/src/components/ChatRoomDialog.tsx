@@ -21,6 +21,7 @@ const ChatRoomDialog: React.FC<ChatRoomDialogProps> = ({
             <h2 className="text-lg font-semibold mb-4">Create New Chat</h2>
             <input
               type="text"
+              name="chatroom_name"
               value={newChatName}
               onChange={(e) => setNewChatName(e.target.value)}
               placeholder="Chat room name"
@@ -49,6 +50,7 @@ const ChatRoomDialog: React.FC<ChatRoomDialogProps> = ({
             <h2 className="text-lg font-semibold mb-4">Select Users</h2>
             <div className="relative mb-2">
               <select
+                name="users"
                 multiple
                 className="border rounded-md p-2 w-full appearance-none focus:outline-none focus:ring focus:border-blue-500"
                 size={users.length}
